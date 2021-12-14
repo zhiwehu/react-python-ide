@@ -7,8 +7,6 @@ import {
   HStack,
   VStack,
   Text,
-  Spacer,
-  Divider,
   Editable,
   EditablePreview,
   EditableInput,
@@ -79,11 +77,6 @@ const App = () => {
   let canvasDisplay = "flex";
   if (codeFullSize || consoleFullSize) {
     canvasDisplay = "none";
-  }
-
-  let dividerDisplay = "flex";
-  if (codeFullSize || canvasDisplay || consoleDisplay) {
-    dividerDisplay = "none";
   }
 
   return (

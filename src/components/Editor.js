@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-python";
