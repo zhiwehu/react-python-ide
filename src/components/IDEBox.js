@@ -1,10 +1,25 @@
-import { Box, Icon, HStack, VStack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Icon,
+  HStack,
+  VStack,
+  Text,
+  useColorMode,
+} from "@chakra-ui/react";
 import { BsFullscreen, BsFullscreenExit } from "react-icons/bs";
 
 const IDEBox = ({ title = "", children, toggleFullSize, fullSize = false }) => {
+  const { colorMode } = useColorMode();
   return (
     <VStack w="100%" h="100%">
-      <HStack w="100%" justify="space-between">
+      <HStack
+        borderRadius="lg"
+        p={2}
+        w="100%"
+        bg={colorMode === "light" ? "lightgreen" : "darkgreen"}
+        justify="space-between"
+      >
         <Box>
           <Text>{title}</Text>
         </Box>
@@ -17,9 +32,9 @@ const IDEBox = ({ title = "", children, toggleFullSize, fullSize = false }) => {
           <Text>{fullSize}</Text>
         </HStack>
       </HStack>
-      <Box w="100%" h="100%" bg="gray">
+      <Flex w="100%" h="100%">
         {children}
-      </Box>
+      </Flex>
     </VStack>
   );
 };
