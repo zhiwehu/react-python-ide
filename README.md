@@ -4,7 +4,9 @@ Running simple Python code in browser.
 
 - React
 - Chakra-ui
-- pyodide ? / pyodide ? (TBD)
+- pyodide 
 
-![](./public/react-python-ide1.png)
-![](public/react-python-ide2.png)
+Live demo: https://react-python-ide.vercel.app/
+
+![](public/react-python-ide-light.png)
+![](public/react-python-ide-dark.png)
