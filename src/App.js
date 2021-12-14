@@ -136,7 +136,7 @@ const App = () => {
           spacing={4}
           borderBottom="1px lightgreen dashed"
         >
-          <Flex zIndex={100}>
+          <Flex>
             <Icon
               pr={4}
               color={colorMode === "light" ? "lightgreen" : "darkgreen"}
@@ -152,6 +152,7 @@ const App = () => {
           <MenuButtons editorRef={editorRef} handleRunCode={handleRunCode} />
           <Spacer />
           <Flex
+            zIndex={100}
             px={4}
             position={{ base: "absolute", lg: "relative" }}
             right={0}

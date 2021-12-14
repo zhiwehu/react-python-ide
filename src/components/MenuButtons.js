@@ -28,7 +28,7 @@ const MenuButtons = ({ editorRef, handleRunCode }) => {
   };
 
   return (
-    <HStack spacing={2} justify="space-between">
+    <HStack spacing={2}>
       <IconButton
         aria-label="New File"
         icon={<FaFile />}
