@@ -136,7 +136,7 @@ const App = () => {
           spacing={4}
           borderBottom="1px lightgreen dashed"
         >
-          <Flex>
+          <Flex zIndex={100}>
             <Icon
               pr={4}
               color={colorMode === "light" ? "lightgreen" : "darkgreen"}
