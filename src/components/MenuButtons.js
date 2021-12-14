@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { Divider, IconButton, HStack } from "@chakra-ui/react";
+import { IconButton, HStack } from "@chakra-ui/react";
 import {
   FaUndo,
   FaRedo,
@@ -8,7 +8,6 @@ import {
   FaSave,
   FaDemocrat,
 } from "react-icons/fa";
-import CodeTitle from "./CodeTitle";
 import { setCode, demoCode } from "../reducers/codeSlice";
 
 const MenuButtons = ({ editorRef, handleRunCode }) => {
@@ -27,9 +26,7 @@ const MenuButtons = ({ editorRef, handleRunCode }) => {
   };
 
   return (
-    <HStack spacing={4}>
-      <CodeTitle />
-      <Divider orientation="vertical" />
+    <HStack spacing={2} justify="space-between">
       <IconButton
         aria-label="New File"
         icon={<FaFile />}

@@ -4,11 +4,13 @@ import { FitAddon } from "xterm-addon-fit";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Box,
+  Divider,
   Flex,
   Icon,
   IconButton,
   Stack,
   VStack,
+  Spacer,
   useColorMode,
 } from "@chakra-ui/react";
 import { FaPython } from "react-icons/fa";
@@ -21,6 +23,7 @@ import {
   toggleCanvasSize,
   toggleConsoleSize,
 } from "./reducers/IDEWindowSizeSlice";
+import CodeTitle from "./components/CodeTitle";
 import { setCode } from "./reducers/codeSlice";
 import skulpt from "skulpt";
 import "xterm/css/xterm.css";
@@ -124,22 +127,26 @@ const App = () => {
           spacing={4}
           borderBottom="1px solid"
         >
-          <Flex pr={4}>
+          <Flex>
             <Icon
+              pr={4}
               color={colorMode === "light" ? "lightgreen" : "darkgreen"}
               fontSize={50}
               as={FaPython}
             />
+            <CodeTitle />
           </Flex>
-
+          <Divider
+            orientation="vertical"
+            display={{ base: "none", lg: "flex" }}
+          />
           <MenuButtons editorRef={editorRef} handleRunCode={handleRunCode} />
-
+          <Spacer />
           <Flex
             px={4}
-            pt={{ base: 0, lg: 4 }}
-            position="absolute"
+            position={{ base: "absolute", lg: "relative" }}
             right={0}
-            top={0}
+            top="-2px"
             align="center"
             justify="center"
           >
