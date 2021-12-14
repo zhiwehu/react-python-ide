@@ -8,4 +8,3 @@ Running simple Python code in browser.
 
 ![](./public/react-python-ide1.png)
 ![](public/react-python-ide2.png)
-
