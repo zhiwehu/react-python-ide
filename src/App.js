@@ -1,66 +1,52 @@
+import { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Box,
   Flex,
   Icon,
+  Divider,
+  IconButton,
   Stack,
   HStack,
   VStack,
   Text,
-  Editable,
-  EditablePreview,
-  EditableInput,
-  useEditableControls,
   useColorMode,
 } from "@chakra-ui/react";
-import { FaPython, FaPen, FaUndo, FaRedo, FaPlay } from "react-icons/fa";
+import { FaPython, FaUndo, FaRedo, FaPlay } from "react-icons/fa";
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import Editor from "./components/Editor";
 import IDEBox from "./components/IDEBox";
+import CodeTitle from "./components/CodeTitle";
 import {
   toggleCodeSize,
   toggleCanvasSize,
   toggleConsoleSize,
 } from "./reducers/IDEWindowSizeSlice";
 import { setResult } from "./reducers/codeSlice";
-import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 
-function EditableControls() {
-  const {
-    isEditing,
-    getSubmitButtonProps,
-    getCancelButtonProps,
-    getEditButtonProps,
-  } = useEditableControls();
-
-  return isEditing ? (
-    <HStack align="center" px={4} spacing={4}>
-      <Icon cursor="pointer" as={CheckIcon} {...getSubmitButtonProps()} />
-      <Icon cursor="pointer" as={CloseIcon} {...getCancelButtonProps()} />
-    </HStack>
-  ) : (
-    <Flex align="center" px={4}>
-      <Icon cursor="pointer" as={FaPen} {...getEditButtonProps()} />
-    </Flex>
-  );
-}
+let pyodideReadyPromise = null;
 
 async function load() {
-  let pyodide = await window.loadPyodide({
-    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.18.1/full/",
-  });
-  return pyodide;
+  if (pyodideReadyPromise == null) {
+    let pyodide = await window.loadPyodide({
+      indexURL: "https://cdn.jsdelivr.net/pyodide/v0.18.1/full/",
+    });
+    return pyodide;
+  }
 }
 
-let pyodideReadyPromise = load();
+pyodideReadyPromise = load();
 
 const App = () => {
-  async function runPython(pycode) {
+  const runPython = async (pycode) => {
     let pyodide = await pyodideReadyPromise;
     let result = await pyodide.runPythonAsync(pycode);
     dispatch(setResult(result));
     return result;
-  }
+  };
+
+  const editorRef = useRef(null);
+
   const { colorMode, toggleColorMode } = useColorMode();
   const codeFullSize = useSelector((state) => state.windowSize.codeFullSize);
   const canvasFullSize = useSelector(
@@ -108,37 +94,37 @@ const App = () => {
           </Flex>
 
           <HStack spacing={4}>
-            <Flex>
-              <Editable defaultValue="unnamed" display="flex">
-                <EditablePreview />
-                <EditableInput />
-                <EditableControls />
-              </Editable>
-            </Flex>
-
-            <Icon cursor="pointer" fontSize={20} as={FaUndo} />
-            <Icon cursor="pointer" fontSize={20} as={FaRedo} />
-            <Icon
-              cursor="pointer"
-              fontSize={20}
-              as={FaPlay}
-              onClick={() => runPython(code)}
+            <CodeTitle />
+            <Divider orientation="vertical" />
+            <IconButton
+              icon={
+                <FaUndo
+                  onClick={() => {
+                    editorRef.current.editor.undo();
+                  }}
+                />
+              }
             />
+            <IconButton
+              icon={<FaRedo />}
+              onClick={() => {
+                editorRef.current.editor.redo();
+              }}
+            />
+            <IconButton icon={<FaPlay />} onClick={() => runPython(code)} />
           </HStack>
           <Flex
             px={4}
-            pt={{ base: 0, lg: 6 }}
+            pt={{ base: 0, lg: 4 }}
             position="absolute"
             right={0}
             top={0}
             align="center"
             justify="center"
           >
-            <Icon
-              cursor="pointer"
-              fontSize={20}
+            <IconButton
               onClick={toggleColorMode}
-              as={colorMode === "light" ? SunIcon : MoonIcon}
+              icon={colorMode === "light" ? <SunIcon /> : <MoonIcon />}
             />
           </Flex>
         </Stack>
@@ -158,7 +144,7 @@ const App = () => {
               toggleFullSize={() => dispatch(toggleCodeSize())}
               fullSize={codeFullSize}
             >
-              <Editor />
+              <Editor editorRef={editorRef} />
             </IDEBox>
           </Flex>
 
@@ -174,7 +160,7 @@ const App = () => {
                 toggleFullSize={() => dispatch(toggleCanvasSize())}
                 fullSize={canvasFullSize}
               >
-                <Text></Text>
+                <Box w="100%" h="100%"></Box>
               </IDEBox>
             </Flex>
             <Flex w="100%" flexGrow={1} display={consoleDisplay}>
