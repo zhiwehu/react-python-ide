@@ -6,7 +6,7 @@ import {
   FaPlay,
   FaFile,
   FaSave,
-  FaDemocrat,
+  FaSmile,
 } from "react-icons/fa";
 import { setCode, demoCode, setTitle } from "../reducers/codeSlice";
 
@@ -65,7 +65,7 @@ const MenuButtons = ({ editorRef, handleRunCode }) => {
       />
       <IconButton
         aria-label="Demo Code"
-        icon={<FaDemocrat />}
+        icon={<FaSmile />}
         onClick={() => setDemoCode()}
       />
     </HStack>
