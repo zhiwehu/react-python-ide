@@ -14,6 +14,9 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { FaPython } from "react-icons/fa";
+import { BsCode } from "react-icons/bs";
+import { VscDebugConsole } from "react-icons/vsc";
+import { GiTurtle } from "react-icons/gi";
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import Editor from "./components/Editor";
 import IDEBox from "./components/IDEBox";
@@ -82,13 +85,12 @@ const App = () => {
   };
 
   const handleRunCode = () => {
-    const code = editorRef.current.editor.getValue();
-    localStorage.setItem("code", code);
+    let code = editorRef.current.editor.getValue();
+
     dispatch(setCode(code));
-    term.write("\r");
-    term.clear();
+    term.reset();
     let result = "";
-    skulpt.pre = "output";
+    //skulpt.pre = "output";
     skulpt.configure({
       output: (text) => {
         if (text.trim().length > 0) {
@@ -104,6 +106,7 @@ const App = () => {
     skulpt.TurtleGraphics.target = "turtlecanvas";
 
     const myPromise = skulpt.misceval.asyncToPromise(function () {
+      if (code === "") code = "from turtle import *";
       return skulpt.importMainWithBody("<stdin>", false, code, true);
     });
     myPromise.then(
@@ -112,20 +115,26 @@ const App = () => {
         console.log("success");
       },
       function (err) {
+        term.write("\x1b[1;31m" + err.toString());
         console.log(err.toString());
       }
     );
   };
 
   return (
-    <Box w="100%" h="100vh" overflow="hidden">
+    <Box
+      w="100%"
+      h="100vh"
+      overflowX="hidden"
+      overflowY={{ base: "auto", lg: "hidden" }}
+    >
       <Flex direction="column" w="full" h="100vh">
         <Stack
           direction={{ base: "column", lg: "row" }}
           px={4}
-          py={2}
+          my={2}
           spacing={4}
-          borderBottom="1px solid"
+          borderBottom="1px lightgreen dashed"
         >
           <Flex>
             <Icon
@@ -161,35 +170,53 @@ const App = () => {
           direction={{ base: "column", lg: "row" }}
           w="100%"
           h="100%"
-          spacing={4}
+          justify="space-between"
+          spacing={{ base: 0, lg: 4 }}
           flexGrow={1}
-          py={4}
           px={4}
         >
-          <Flex h="100%" flexGrow={2} minW="67%" display={codeDisplay}>
+          <Flex
+            id="code"
+            minH="50%"
+            h="100%"
+            flexGrow={2}
+            w={{ base: "100%", lg: "67%" }}
+            minW="67%"
+            display={codeDisplay}
+            pb={{ base: 2, lg: 0 }}
+          >
             <IDEBox
               title="Code"
+              editorRef={editorRef}
               toggleFullSize={() => dispatch(toggleCodeSize())}
               fullSize={codeFullSize}
+              titleIcon={BsCode}
             >
               <Editor editorRef={editorRef} />
             </IDEBox>
           </Flex>
 
           <VStack
-            w={{ base: "100%", lg: "33%" }}
+            w={{ base: "100%", lg: "32%" }}
             h="100%"
-            spacing={4}
             flexGrow={1}
             display={codeFullSize ? "none" : "flex"}
           >
-            <Flex w="100%" minH="50%" flexGrow={1} display={canvasDisplay}>
+            <Flex
+              id="canvas"
+              w="100%"
+              h={{ base: "70vh", lg: "50%" }}
+              minH="50%"
+              flexGrow={1}
+              display={canvasDisplay}
+            >
               <IDEBox
                 title="Canvas"
                 toggleFullSize={() => {
                   dispatch(toggleCanvasSize());
                 }}
                 fullSize={canvasFullSize}
+                titleIcon={GiTurtle}
               >
                 <Box
                   w="100%"
@@ -199,11 +226,21 @@ const App = () => {
                 ></Box>
               </IDEBox>
             </Flex>
-            <Flex w="100%" minH="50%" flexGrow={1} display={consoleDisplay}>
+
+            <Flex
+              id="console"
+              w="100%"
+              h={{ base: "70vh", lg: "50%" }}
+              minH="50%"
+              mt="0px !important"
+              flexGrow={1}
+              display={consoleDisplay}
+            >
               <IDEBox
                 title="Console"
                 toggleFullSize={() => dispatch(toggleConsoleSize())}
                 fullSize={consoleFullSize}
+                titleIcon={VscDebugConsole}
               >
                 <Box width="100%" height="100%" id="xterm"></Box>
               </IDEBox>

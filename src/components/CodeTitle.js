@@ -1,3 +1,4 @@
+import { useSelector, useDispatch } from "react-redux";
 import {
   Flex,
   IconButton,
@@ -9,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { FaPen } from "react-icons/fa";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import { setTitle } from "../reducers/codeSlice";
 
 const EditableControls = () => {
   const {
@@ -46,9 +48,14 @@ const EditableControls = () => {
 };
 
 const CodeTitle = () => {
+  const title = useSelector((state) => state.code.title);
+  const dispatch = useDispatch();
+  const onSubmit = (newTitle) => {
+    dispatch(setTitle(newTitle));
+  };
   return (
     <Flex justify="space-between">
-      <Editable defaultValue="unnamed" display="flex">
+      <Editable defaultValue={title} display="flex" onSubmit={onSubmit}>
         <EditablePreview
           alignItems="center"
           overflow="hidden"

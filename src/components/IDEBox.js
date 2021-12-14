@@ -1,5 +1,4 @@
 import {
-  Box,
   Flex,
   Icon,
   HStack,
@@ -7,9 +6,21 @@ import {
   Text,
   useColorMode,
 } from "@chakra-ui/react";
-import { BsFullscreen, BsFullscreenExit } from "react-icons/bs";
+import {
+  BsFullscreen,
+  BsFullscreenExit,
+  BsZoomIn,
+  BsZoomOut,
+} from "react-icons/bs";
 
-const IDEBox = ({ title = "", children, toggleFullSize, fullSize = false }) => {
+const IDEBox = ({
+  title = "",
+  children,
+  toggleFullSize,
+  fullSize = false,
+  editorRef = null,
+  titleIcon,
+}) => {
   const { colorMode } = useColorMode();
   return (
     <VStack w="100%" h="100%">
@@ -20,11 +31,39 @@ const IDEBox = ({ title = "", children, toggleFullSize, fullSize = false }) => {
         bg={colorMode === "light" ? "lightgreen" : "darkgreen"}
         justify="space-between"
       >
-        <Box>
+        <Flex align="center">
+          <Icon fontSize="1.5em" as={titleIcon} pr={2} />
           <Text>{title}</Text>
-        </Box>
-        <HStack>
+        </Flex>
+        <HStack spacing={4}>
+          {editorRef && (
+            <>
+              <Icon
+                cursor="pointer"
+                fontSize={20}
+                as={BsZoomIn}
+                onClick={() => {
+                  let fz = parseInt(editorRef.current.editor.getFontSize());
+                  fz += 1;
+                  if (fz > 80) fz = 80;
+                  editorRef.current.editor.setFontSize(fz);
+                }}
+              />
+              <Icon
+                cursor="pointer"
+                fontSize={20}
+                as={BsZoomOut}
+                onClick={() => {
+                  let fz = parseInt(editorRef.current.editor.getFontSize());
+                  fz -= 1;
+                  if (fz < 12) fz = 12;
+                  editorRef.current.editor.setFontSize(fz);
+                }}
+              />
+            </>
+          )}
           <Icon
+            cursor="pointer"
             fontSize={20}
             as={fullSize ? BsFullscreenExit : BsFullscreen}
             onClick={toggleFullSize}

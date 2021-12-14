@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { IconButton, HStack } from "@chakra-ui/react";
 import {
   FaUndo,
@@ -8,15 +8,17 @@ import {
   FaSave,
   FaDemocrat,
 } from "react-icons/fa";
-import { setCode, demoCode } from "../reducers/codeSlice";
+import { setCode, demoCode, setTitle } from "../reducers/codeSlice";
 
 const MenuButtons = ({ editorRef, handleRunCode }) => {
   const dispatch = useDispatch();
+  const title = useSelector((state) => state.code.title);
 
   const saveCode = () => {
     const code = editorRef.current.editor.getValue();
     dispatch(setCode(code));
     localStorage.setItem("code", code);
+    localStorage.setItem("title", title);
   };
 
   const setDemoCode = () => {
@@ -31,9 +33,11 @@ const MenuButtons = ({ editorRef, handleRunCode }) => {
         aria-label="New File"
         icon={<FaFile />}
         onClick={() => {
+          localStorage.setItem("title", "unnamed");
           localStorage.setItem("code", "");
           editorRef.current.editor.setValue("");
           dispatch(setCode(""));
+          dispatch(setTitle("unnamed"));
         }}
       />
       <IconButton

@@ -17,8 +17,10 @@ rt(60)
 circle(50, 120)`;
 
 const savedCode = localStorage.getItem("code") || "";
+const savedTitle = localStorage.getItem("title") || "unnamed";
 
 const initialState = {
+  title: savedTitle,
   code: savedCode,
   result: "",
 };
@@ -33,8 +35,11 @@ export const codeSlice = createSlice({
     setResult: (state, action) => {
       state.result = action.payload;
     },
+    setTitle: (state, action) => {
+      state.title = action.payload;
+    },
   },
 });
 
-export const { setCode, setResult } = codeSlice.actions;
+export const { setCode, setResult, setTitle } = codeSlice.actions;
 export default codeSlice.reducer;
