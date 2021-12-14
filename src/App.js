@@ -6,10 +6,12 @@ import {
   Stack,
   HStack,
   VStack,
+  Spacer,
   Text,
   Editable,
   EditablePreview,
   EditableInput,
+  useEditableControls,
   useColorMode,
 } from "@chakra-ui/react";
 import { FaPython, FaPen, FaUndo, FaRedo, FaPlay } from "react-icons/fa";
@@ -22,19 +24,28 @@ import {
   toggleConsoleSize,
 } from "./reducers/IDEWindowSizeSlice";
 import { setResult } from "./reducers/codeSlice";
+import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 
-/*
-let pyodide = null;
+function EditableControls() {
+  const {
+    isEditing,
+    getSubmitButtonProps,
+    getCancelButtonProps,
+    getEditButtonProps,
+  } = useEditableControls();
 
-const runPython = async (code) => {
-  if (pyodide === null) {
-    pyodide = await window.loadPyodide({
-      indexURL: "https://cdn.jsdelivr.net/pyodide/v0.18.1/full/",
-    });
-  }
-  return await pyodide.runPython(code);
-};
-*/
+  return isEditing ? (
+    <HStack align="center" px={4} spacing={4}>
+      <Icon cursor="pointer" as={CheckIcon} {...getSubmitButtonProps()} />
+      <Icon cursor="pointer" as={CloseIcon} {...getCancelButtonProps()} />
+    </HStack>
+  ) : (
+    <Flex align="center" px={4}>
+      <Icon cursor="pointer" as={FaPen} {...getEditButtonProps()} />
+    </Flex>
+  );
+}
+
 async function load() {
   let pyodide = await window.loadPyodide({
     indexURL: "https://cdn.jsdelivr.net/pyodide/v0.18.1/full/",
@@ -92,14 +103,16 @@ const App = () => {
           <Flex pr={4}>
             <Icon fontSize={50} as={FaPython} />
           </Flex>
-          <HStack spacing={4} justify="flex-start">
-            <Box w="200px">
-              <Editable defaultValue="unnamed">
+
+          <HStack spacing={4}>
+            <Flex>
+              <Editable defaultValue="unnamed" display="flex">
                 <EditablePreview />
                 <EditableInput />
+                <EditableControls />
               </Editable>
-            </Box>
-            <Icon cursor="pointer" as={FaPen} />
+            </Flex>
+
             <Icon cursor="pointer" fontSize={20} as={FaUndo} />
             <Icon cursor="pointer" fontSize={20} as={FaRedo} />
             <Icon
@@ -111,7 +124,7 @@ const App = () => {
           </HStack>
           <Flex
             px={4}
-            pt={6}
+            pt={{ base: 0, lg: 6 }}
             position="absolute"
             right={0}
             top={0}
