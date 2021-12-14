@@ -6,7 +6,6 @@ import {
   Stack,
   HStack,
   VStack,
-  Spacer,
   Text,
   Editable,
   EditablePreview,
@@ -101,7 +100,11 @@ const App = () => {
           borderBottom="1px solid"
         >
           <Flex pr={4}>
-            <Icon fontSize={50} as={FaPython} />
+            <Icon
+              color={colorMode === "light" ? "darkcyan" : "white"}
+              fontSize={50}
+              as={FaPython}
+            />
           </Flex>
 
           <HStack spacing={4}>
