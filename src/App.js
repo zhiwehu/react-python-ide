@@ -6,23 +6,22 @@ import {
   Box,
   Flex,
   Icon,
-  Divider,
   IconButton,
   Stack,
-  HStack,
   VStack,
   useColorMode,
 } from "@chakra-ui/react";
-import { FaPython, FaUndo, FaRedo, FaPlay } from "react-icons/fa";
+import { FaPython } from "react-icons/fa";
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import Editor from "./components/Editor";
 import IDEBox from "./components/IDEBox";
-import CodeTitle from "./components/CodeTitle";
+import MenuButtons from "./components/MenuButtons";
 import {
   toggleCodeSize,
   toggleCanvasSize,
   toggleConsoleSize,
 } from "./reducers/IDEWindowSizeSlice";
+import { setCode } from "./reducers/codeSlice";
 import skulpt from "skulpt";
 import "xterm/css/xterm.css";
 
@@ -45,7 +44,6 @@ const App = () => {
   const consoleFullSize = useSelector(
     (state) => state.windowSize.consoleFullSize
   );
-  const code = useSelector((state) => state.code.code);
 
   useEffect(() => {
     term.loadAddon(fitAddon);
@@ -80,7 +78,10 @@ const App = () => {
     return skulpt.builtinFiles["files"][x];
   };
 
-  const handleRunCode = (pycode) => {
+  const handleRunCode = () => {
+    const code = editorRef.current.editor.getValue();
+    localStorage.setItem("code", code);
+    dispatch(setCode(code));
     term.write("\r");
     term.clear();
     let result = "";
@@ -93,16 +94,15 @@ const App = () => {
       },
       read: readf,
     });
-    //(skulpt.TurtleGraphics || (skulpt.TurtleGraphics = {})).target = "turtlecanvas";
+
     skulpt.TurtleGraphics = {};
     skulpt.TurtleGraphics.width = turtleCanvas.current.offsetWidth;
     skulpt.TurtleGraphics.height = turtleCanvas.current.offsetHeight;
     skulpt.TurtleGraphics.target = "turtlecanvas";
 
     const myPromise = skulpt.misceval.asyncToPromise(function () {
-      return skulpt.importMainWithBody("<stdin>", false, pycode, true);
+      return skulpt.importMainWithBody("<stdin>", false, code, true);
     });
-    //term.write("\r\n$ ");
     myPromise.then(
       function (mod) {
         term.write(result.trim());
@@ -132,26 +132,8 @@ const App = () => {
             />
           </Flex>
 
-          <HStack spacing={4}>
-            <CodeTitle />
-            <Divider orientation="vertical" />
-            <IconButton
-              icon={
-                <FaUndo
-                  onClick={() => {
-                    editorRef.current.editor.undo();
-                  }}
-                />
-              }
-            />
-            <IconButton
-              icon={<FaRedo />}
-              onClick={() => {
-                editorRef.current.editor.redo();
-              }}
-            />
-            <IconButton icon={<FaPlay />} onClick={() => handleRunCode(code)} />
-          </HStack>
+          <MenuButtons editorRef={editorRef} handleRunCode={handleRunCode} />
+
           <Flex
             px={4}
             pt={{ base: 0, lg: 4 }}

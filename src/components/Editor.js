@@ -1,16 +1,10 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-github";
-import { setCode } from "../reducers/codeSlice";
 
 const Editor = ({ editorRef }) => {
-  const dispatch = useDispatch();
-  const onChange = (newValue) => {
-    dispatch(setCode(newValue));
-  };
-
   const code = useSelector((state) => state.code.code);
 
   return (
@@ -22,7 +16,6 @@ const Editor = ({ editorRef }) => {
       height="100%"
       mode="python"
       theme="github"
-      onChange={onChange}
       name="UNIQUE_ID_OF_DIV"
       editorProps={{ $blockScrolling: true }}
       onLoad={(editor) => {
