@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { v4 as uuid4 } from "uuid";
-import { IconButton, HStack, useDisclosure } from "@chakra-ui/react";
+import { IconButton, HStack, Tooltip, useDisclosure } from "@chakra-ui/react";
 import {
   FaUndo,
   FaRedo,
@@ -62,45 +62,63 @@ const MenuButtons = ({ editorRef, handleRunCode }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <HStack spacing={2}>
-      <IconButton
-        aria-label="My Python Files"
-        icon={<FaListUl />}
-        onClick={onOpen}
-      />
+      <Tooltip label="My Python Files">
+        <IconButton
+          aria-label="My Python Files"
+          icon={<FaListUl />}
+          onClick={onOpen}
+        />
+      </Tooltip>
       <PythonFileList onClose={onClose} isOpen={isOpen} />
-      <IconButton
-        aria-label="New File"
-        icon={<FaFile />}
-        onClick={createCode}
-      />
-      <IconButton
-        aria-label="Undo"
-        icon={
-          <FaUndo
-            onClick={() => {
-              editorRef.current.editor.undo();
-            }}
-          />
-        }
-      />
-      <IconButton
-        aria-label="Redo"
-        icon={<FaRedo />}
-        onClick={() => {
-          editorRef.current.editor.redo();
-        }}
-      />
-      <IconButton aria-label="Run" icon={<FaPlay />} onClick={handleRunCode} />
-      <IconButton
-        aria-label="Save"
-        icon={<FaSave />}
-        onClick={() => saveCode()}
-      />
-      <IconButton
-        aria-label="Demo Code"
-        icon={<FaSmile />}
-        onClick={() => setDemoCode()}
-      />
+      <Tooltip label="New File">
+        <IconButton
+          aria-label="New File"
+          icon={<FaFile />}
+          onClick={createCode}
+        />
+      </Tooltip>
+      <Tooltip label="Undo">
+        <IconButton
+          aria-label=""
+          icon={
+            <FaUndo
+              onClick={() => {
+                editorRef.current.editor.undo();
+              }}
+            />
+          }
+        />
+      </Tooltip>
+      <Tooltip label="Redo">
+        <IconButton
+          aria-label="Redo"
+          icon={<FaRedo />}
+          onClick={() => {
+            editorRef.current.editor.redo();
+          }}
+        />
+      </Tooltip>
+      <Tooltip label="Run">
+        <IconButton
+          aria-label="Run"
+          icon={<FaPlay />}
+          onClick={handleRunCode}
+        />
+      </Tooltip>
+      <Tooltip label="Save">
+        <IconButton
+          aria-label="Save"
+          icon={<FaSave />}
+          onClick={() => saveCode()}
+        />
+      </Tooltip>
+      <Tooltip label="Demo Code">
+        <IconButton
+          aria-label="Demo Code"
+          icon={<FaSmile />}
+          onClick={() => setDemoCode()}
+        />
+      </Tooltip>
     </HStack>
   );
 };
