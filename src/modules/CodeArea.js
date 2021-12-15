@@ -24,7 +24,7 @@ const CodeArea = ({ editorRef }) => {
     <Flex
       id="code"
       minH="50%"
-      h="100%"
+      h="99%"
       flexGrow={2}
       w={{ base: "100%", lg: "67%" }}
       minW="67%"

@@ -14,7 +14,7 @@ import {
   BsEye,
   BsEyeSlash,
 } from "react-icons/bs";
-
+import { AiOutlineClear } from "react-icons/ai";
 const IDEBox = ({
   title = "",
   children,
@@ -24,6 +24,7 @@ const IDEBox = ({
   show = true,
   editorRef = null,
   titleIcon,
+  clearConsole = null,
 }) => {
   const { colorMode } = useColorMode();
   return (
@@ -74,6 +75,14 @@ const IDEBox = ({
               onClick={toggleShowHide}
             />
           )}
+          {title === "Console" && (
+            <Icon
+              cursor="pointer"
+              fontSize={20}
+              as={AiOutlineClear}
+              onClick={clearConsole}
+            />
+          )}
 
           <Icon
             cursor="pointer"
@@ -83,7 +92,12 @@ const IDEBox = ({
           />
         </HStack>
       </HStack>
-      <Flex display={show ? "flex" : "none"} w="100%" h="100%">
+      <Flex
+        border="1px dashed lightgreen"
+        display={show ? "flex" : "none"}
+        w="100%"
+        h="100%"
+      >
         {children}
       </Flex>
     </VStack>

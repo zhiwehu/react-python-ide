@@ -2,12 +2,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { Flex } from "@chakra-ui/react";
 import { VscDebugConsole } from "react-icons/vsc";
 
-import XTerminal from "../components/XTerminal";
+import XTerminal, { clearConsole } from "../components/XTerminal";
 import IDEBox from "../components/IDEBox";
 import {
   toggleConsoleSize,
   toggleShowHideConsole,
 } from "../reducers/IDEWindowSizeSlice";
+import { setOutput } from "../reducers/pythonFileListSlice";
 
 const Console = ({ terminalRef }) => {
   const codeFullSize = useSelector((state) => state.windowSize.codeFullSize);
@@ -18,6 +19,11 @@ const Console = ({ terminalRef }) => {
   const consoleFullSize = useSelector(
     (state) => state.windowSize.consoleFullSize
   );
+
+  const clear = () => {
+    clearConsole();
+    dispatch(setOutput(""));
+  };
 
   const dispatch = useDispatch();
 
@@ -43,6 +49,7 @@ const Console = ({ terminalRef }) => {
         fullSize={consoleFullSize}
         show={show}
         titleIcon={VscDebugConsole}
+        clearConsole={clear}
       >
         <XTerminal terminalRef={terminalRef} />
       </IDEBox>

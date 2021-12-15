@@ -12,6 +12,7 @@ import {
 import CodeArea from "./modules/CodeArea";
 import Turtle from "./modules/Turtle";
 import Console from "./modules/Console";
+import { termInput } from "./components/XTerminal";
 
 const App = () => {
   const editorRef = useRef(null);
@@ -43,6 +44,8 @@ const App = () => {
     );
     //skulpt.pre = "output";
     skulpt.configure({
+      inputfun: termInput,
+      inputfunTakesPrompt: true,
       output: (text) => {
         if (text.trim().length > 0) {
           result += "\r" + text;
@@ -62,7 +65,7 @@ const App = () => {
     });
     myPromise.then(
       function (mod) {
-        dispatch(setOutput(result.trim()));
+        dispatch(setOutput(result));
         console.log("success");
       },
       function (err) {
