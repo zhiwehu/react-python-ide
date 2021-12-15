@@ -1,6 +1,4 @@
-import { useRef, useEffect } from "react";
-import { Terminal } from "xterm";
-import { FitAddon } from "xterm-addon-fit";
+import { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Box,
@@ -24,22 +22,21 @@ import {
   toggleConsoleSize,
 } from "./reducers/IDEWindowSizeSlice";
 import CodeTitle from "./components/CodeTitle";
+import XTerminal from "./components/XTerminal";
 import skulpt from "skulpt";
 import { ReactComponent as PythonIcon } from "./icons-python.svg";
-import "xterm/css/xterm.css";
-
-const term = new Terminal();
-const fitAddon = new FitAddon();
+import {
+  setCurrentFile,
+  getCurrentDateTime,
+  setOutput,
+} from "./reducers/pythonFileListSlice";
 
 const App = () => {
   const editorRef = useRef(null);
   const turtleCanvas = useRef(null);
+  const terminalRef = useRef(null);
 
   const { colorMode, toggleColorMode } = useColorMode();
-  term.setOption("theme", {
-    foreground: colorMode === "light" ? "black" : "white",
-    background: colorMode === "light" ? "white" : "#1b202b",
-  });
   const codeFullSize = useSelector((state) => state.windowSize.codeFullSize);
   const canvasFullSize = useSelector(
     (state) => state.windowSize.canvasFullSize
@@ -49,12 +46,6 @@ const App = () => {
   );
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    term.loadAddon(fitAddon);
-    term.open(document.getElementById("xterm"));
-    fitAddon.fit();
-  }, []);
 
   let codeDisplay = "flex";
   if (canvasFullSize || consoleFullSize) {
@@ -82,10 +73,15 @@ const App = () => {
   };
 
   const handleRunCode = () => {
-    let code = editorRef.current.editor.getValue();
-
-    term.reset();
     let result = "";
+    let code = editorRef.current.editor.getValue();
+    dispatch(
+      setCurrentFile({
+        id: null,
+        code: code,
+        datetime: getCurrentDateTime(),
+      })
+    );
     //skulpt.pre = "output";
     skulpt.configure({
       output: (text) => {
@@ -107,11 +103,11 @@ const App = () => {
     });
     myPromise.then(
       function (mod) {
-        term.write(result.trim());
+        dispatch(setOutput(result.trim()));
         console.log("success");
       },
       function (err) {
-        term.write("\x1b[1;31m" + err.toString());
+        dispatch(setOutput("\x1b[1;31m" + err.toString()));
         console.log(err.toString());
       }
     );
@@ -234,7 +230,7 @@ const App = () => {
                 fullSize={consoleFullSize}
                 titleIcon={VscDebugConsole}
               >
-                <Box width="100%" height="100%" id="xterm"></Box>
+                <XTerminal terminalRef={terminalRef} />
               </IDEBox>
             </Flex>
           </VStack>

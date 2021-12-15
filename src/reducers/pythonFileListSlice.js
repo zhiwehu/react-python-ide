@@ -38,6 +38,7 @@ const savedCurrentFile =
 const initialState = {
   files: savedFiles,
   currentFile: savedCurrentFile,
+  output: "",
 };
 
 export const pythonFileListSlice = createSlice({
@@ -62,9 +63,12 @@ export const pythonFileListSlice = createSlice({
       );
       localStorage.setItem("files", JSON.stringify(state.files));
     },
+    setOutput: (state, action) => {
+      state.output = action.payload;
+    },
   },
 });
 
-export const { setCurrentFile, addFile, deleteFile, updateFile } =
+export const { setCurrentFile, addFile, deleteFile, updateFile, setOutput } =
   pythonFileListSlice.actions;
 export default pythonFileListSlice.reducer;
