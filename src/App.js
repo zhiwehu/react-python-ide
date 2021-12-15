@@ -34,6 +34,7 @@ const App = () => {
 
   const handleRunCode = () => {
     let result = "";
+    dispatch(setOutput(result));
     let code = editorRef.current.editor.getValue();
     dispatch(
       setCurrentFile({
