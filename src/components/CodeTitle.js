@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { FaPen } from "react-icons/fa";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
-import { setTitle } from "../reducers/codeSlice";
+import { setCurrentFile } from "../reducers/pythonFileListSlice";
 
 const EditableControls = () => {
   const {
@@ -47,11 +47,18 @@ const EditableControls = () => {
   }
 };
 
-const CodeTitle = () => {
-  const title = useSelector((state) => state.code.title);
+const CodeTitle = ({ editorRef }) => {
   const dispatch = useDispatch();
-  const onSubmit = (newTitle) => {
-    dispatch(setTitle(newTitle));
+  const currentFile = useSelector((state) => state.code.currentFile);
+  const title = currentFile !== null ? currentFile.title : "unnamed";
+  const onSubmit = (newValue) => {
+    dispatch(
+      setCurrentFile({
+        ...currentFile,
+        title: newValue,
+        code: editorRef.current.editor.getValue(),
+      })
+    );
   };
   return (
     <Flex justify="space-between">

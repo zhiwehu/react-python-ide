@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import windowSizeReducer from "./reducers/IDEWindowSizeSlice";
-import codeReducer from "./reducers/codeSlice";
+import pythonFileListReducer from "./reducers/pythonFileListSlice";
 
 export const store = configureStore({
   reducer: {
     windowSize: windowSizeReducer,
-    code: codeReducer,
+    code: pythonFileListReducer,
   },
 });

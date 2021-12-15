@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
-import { IconButton, HStack } from "@chakra-ui/react";
+import { v4 as uuid4 } from "uuid";
+import { IconButton, HStack, useDisclosure } from "@chakra-ui/react";
 import {
   FaUndo,
   FaRedo,
@@ -7,38 +8,70 @@ import {
   FaFile,
   FaSave,
   FaSmile,
+  FaListUl,
 } from "react-icons/fa";
-import { setCode, demoCode, setTitle } from "../reducers/codeSlice";
+import {
+  setCurrentFile,
+  demoCode,
+  getCurrentDateTime,
+  addFile,
+  updateFile,
+} from "../reducers/pythonFileListSlice";
+import PythonFileList from "./PythonFileList";
 
 const MenuButtons = ({ editorRef, handleRunCode }) => {
   const dispatch = useDispatch();
-  const title = useSelector((state) => state.code.title);
+  const currentFile = useSelector((state) => state.code.currentFile);
+
+  const createCode = () => {
+    const newFile = {
+      id: null,
+      title: "unnamed",
+      code: "",
+      datetime: getCurrentDateTime(),
+    };
+    dispatch(setCurrentFile(newFile));
+  };
 
   const saveCode = () => {
     const code = editorRef.current.editor.getValue();
-    dispatch(setCode(code));
-    localStorage.setItem("code", code);
-    localStorage.setItem("title", title);
+    const f = {
+      ...currentFile,
+      code: code,
+      datetime: getCurrentDateTime(),
+    };
+    if (f.id === null) {
+      f.id = uuid4();
+      dispatch(addFile(f));
+    } else {
+      dispatch(updateFile(f));
+    }
+    dispatch(setCurrentFile(f));
   };
 
   const setDemoCode = () => {
-    editorRef.current.editor.setValue(demoCode);
-    dispatch(setCode(demoCode));
-    localStorage.setItem("code", demoCode);
+    const newFile = {
+      id: null,
+      title: "demo",
+      code: demoCode,
+      datetime: getCurrentDateTime(),
+    };
+    dispatch(setCurrentFile(newFile));
   };
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <HStack spacing={2}>
       <IconButton
+        aria-label="My Python Files"
+        icon={<FaListUl />}
+        onClick={onOpen}
+      />
+      <PythonFileList onClose={onClose} isOpen={isOpen} />
+      <IconButton
         aria-label="New File"
         icon={<FaFile />}
-        onClick={() => {
-          localStorage.setItem("title", "unnamed");
-          localStorage.setItem("code", "");
-          editorRef.current.editor.setValue("");
-          dispatch(setCode(""));
-          dispatch(setTitle("unnamed"));
-        }}
+        onClick={createCode}
       />
       <IconButton
         aria-label="Undo"

@@ -4,16 +4,13 @@ import { FitAddon } from "xterm-addon-fit";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Box,
-  Divider,
   Flex,
-  Icon,
   IconButton,
   Stack,
   VStack,
   Spacer,
   useColorMode,
 } from "@chakra-ui/react";
-import { FaPython } from "react-icons/fa";
 import { BsCode } from "react-icons/bs";
 import { VscDebugConsole } from "react-icons/vsc";
 import { GiTurtle } from "react-icons/gi";
@@ -27,8 +24,8 @@ import {
   toggleConsoleSize,
 } from "./reducers/IDEWindowSizeSlice";
 import CodeTitle from "./components/CodeTitle";
-import { setCode } from "./reducers/codeSlice";
 import skulpt from "skulpt";
+import { ReactComponent as PythonIcon } from "./icons-python.svg";
 import "xterm/css/xterm.css";
 
 const term = new Terminal();
@@ -51,13 +48,13 @@ const App = () => {
     (state) => state.windowSize.consoleFullSize
   );
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     term.loadAddon(fitAddon);
     term.open(document.getElementById("xterm"));
     fitAddon.fit();
   }, []);
-
-  const dispatch = useDispatch();
 
   let codeDisplay = "flex";
   if (canvasFullSize || consoleFullSize) {
@@ -87,7 +84,6 @@ const App = () => {
   const handleRunCode = () => {
     let code = editorRef.current.editor.getValue();
 
-    dispatch(setCode(code));
     term.reset();
     let result = "";
     //skulpt.pre = "output";
@@ -132,23 +128,18 @@ const App = () => {
         <Stack
           direction={{ base: "column", lg: "row" }}
           px={4}
-          my={2}
+          mb={2}
           spacing={4}
           borderBottom="1px lightgreen dashed"
         >
           <Flex>
-            <Icon
-              pr={4}
-              color={colorMode === "light" ? "lightgreen" : "darkgreen"}
-              fontSize={50}
-              as={FaPython}
+            <PythonIcon
+              width={50}
+              height={50}
+              style={{ paddingRight: "10px" }}
             />
-            <CodeTitle />
+            <CodeTitle editorRef={editorRef} />
           </Flex>
-          <Divider
-            orientation="vertical"
-            display={{ base: "none", lg: "flex" }}
-          />
           <MenuButtons editorRef={editorRef} handleRunCode={handleRunCode} />
           <Spacer />
           <Flex
@@ -156,7 +147,7 @@ const App = () => {
             px={4}
             position={{ base: "absolute", lg: "relative" }}
             right={0}
-            top="-2px"
+            top={{ base: "-11px", lg: 0 }}
             align="center"
             justify="center"
           >
