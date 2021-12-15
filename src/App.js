@@ -51,10 +51,10 @@ const App = () => {
       read: readf,
     });
 
-    skulpt.TurtleGraphics = {};
+    (skulpt.TurtleGraphics || (skulpt.TurtleGraphics = {})).target =
+      "turtlecanvas";
     skulpt.TurtleGraphics.width = turtleCanvas.current.offsetWidth;
     skulpt.TurtleGraphics.height = turtleCanvas.current.offsetHeight;
-    skulpt.TurtleGraphics.target = "turtlecanvas";
 
     const myPromise = skulpt.misceval.asyncToPromise(function () {
       if (code === "") code = "from turtle import *";

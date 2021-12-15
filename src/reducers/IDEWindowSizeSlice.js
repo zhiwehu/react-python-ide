@@ -4,6 +4,9 @@ const initialState = {
   codeFullSize: false,
   canvasFullSize: false,
   consoleFullSize: false,
+  codeShow: true,
+  canvasShow: true,
+  consoleShow: true,
 };
 
 export const windowSizeSlice = createSlice({
@@ -19,9 +22,24 @@ export const windowSizeSlice = createSlice({
     toggleConsoleSize: (state) => {
       state.consoleFullSize = !state.consoleFullSize;
     },
+    toggleShowHideCode: (state) => {
+      state.codeShow = !state.codeShow;
+    },
+    toggleShowHideCanvas: (state) => {
+      state.canvasShow = !state.canvasShow;
+    },
+    toggleShowHideConsole: (state) => {
+      state.consoleShow = !state.consoleShow;
+    },
   },
 });
 
-export const { toggleCodeSize, toggleCanvasSize, toggleConsoleSize } =
-  windowSizeSlice.actions;
+export const {
+  toggleCodeSize,
+  toggleCanvasSize,
+  toggleConsoleSize,
+  toggleShowHideCode,
+  toggleShowHideCanvas,
+  toggleShowHideConsole,
+} = windowSizeSlice.actions;
 export default windowSizeSlice.reducer;

@@ -4,13 +4,17 @@ import { VscDebugConsole } from "react-icons/vsc";
 
 import XTerminal from "../components/XTerminal";
 import IDEBox from "../components/IDEBox";
-import { toggleConsoleSize } from "../reducers/IDEWindowSizeSlice";
+import {
+  toggleConsoleSize,
+  toggleShowHideConsole,
+} from "../reducers/IDEWindowSizeSlice";
 
 const Console = ({ terminalRef }) => {
   const codeFullSize = useSelector((state) => state.windowSize.codeFullSize);
   const canvasFullSize = useSelector(
     (state) => state.windowSize.canvasFullSize
   );
+  const show = useSelector((state) => state.windowSize.consoleShow);
   const consoleFullSize = useSelector(
     (state) => state.windowSize.consoleFullSize
   );
@@ -25,16 +29,19 @@ const Console = ({ terminalRef }) => {
     <Flex
       id="console"
       w="100%"
-      h={{ base: "70vh", lg: "50%" }}
-      minH="50%"
+      minH={show ? "50%" : "0px"}
       mt="0px !important"
-      flexGrow={1}
+      ml="0px !important"
+      flexGrow={show ? 1 : 0}
       display={consoleDisplay}
+      pb={2}
     >
       <IDEBox
         title="Console"
         toggleFullSize={() => dispatch(toggleConsoleSize())}
+        toggleShowHide={() => dispatch(toggleShowHideConsole())}
         fullSize={consoleFullSize}
+        show={show}
         titleIcon={VscDebugConsole}
       >
         <XTerminal terminalRef={terminalRef} />

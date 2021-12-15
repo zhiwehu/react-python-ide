@@ -11,13 +11,17 @@ import {
   BsFullscreenExit,
   BsZoomIn,
   BsZoomOut,
+  BsEye,
+  BsEyeSlash,
 } from "react-icons/bs";
 
 const IDEBox = ({
   title = "",
   children,
   toggleFullSize,
+  toggleShowHide,
   fullSize = false,
+  show = true,
   editorRef = null,
   titleIcon,
 }) => {
@@ -62,16 +66,24 @@ const IDEBox = ({
               />
             </>
           )}
+          {!editorRef && (
+            <Icon
+              cursor="pointer"
+              fontSize={20}
+              as={show ? BsEye : BsEyeSlash}
+              onClick={toggleShowHide}
+            />
+          )}
+
           <Icon
             cursor="pointer"
             fontSize={20}
             as={fullSize ? BsFullscreenExit : BsFullscreen}
             onClick={toggleFullSize}
           />
-          <Text>{fullSize}</Text>
         </HStack>
       </HStack>
-      <Flex w="100%" h="100%">
+      <Flex display={show ? "flex" : "none"} w="100%" h="100%">
         {children}
       </Flex>
     </VStack>
