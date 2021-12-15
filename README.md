@@ -4,7 +4,7 @@ Running simple Python code in browser.
 
 - React
 - Chakra-ui
-- pyodide 
+- skulpt 
 
 Live demo: https://react-python-ide.vercel.app/
 
