@@ -66,11 +66,11 @@ const App = () => {
     });
     myPromise.then(
       function (mod) {
-        dispatch(setOutput("\x1b[1;0m" + result));
+        dispatch(setOutput("\n\x1b[1;0m" + result));
         console.log("success");
       },
       function (err) {
-        dispatch(setOutput("\x1b[1;31m" + err.toString() + "\n"));
+        dispatch(setOutput("\x1b[1;31m" + err.toString()));
         console.log(err.toString());
       }
     );

@@ -8,19 +8,35 @@ import "xterm/css/xterm.css";
 
 const term = new Terminal();
 const fitAddon = new FitAddon();
+term.loadAddon(fitAddon);
+term.write(">>> ");
 
 let resolveInput;
 
 export const termInput = (prompt) => {
   return new Promise((resolve) => {
     term.focus();
-    term.write("\x1b[1;0m" + prompt + " ");
+    term.write("\x1b[1;0m\r\n" + prompt + " ");
     resolveInput = resolve;
   });
 };
 
 export const clearConsole = () => {
   term.reset();
+  term.write(">>> ");
+  term.focus();
+};
+
+const print = (text) => {
+  // we need \r\n as, on xterm: \n just move the cursor down ; \r move it left
+  // we also don't care if we duplicate a \r
+  text = text.replaceAll("\r", "");
+  text = text.replaceAll("\n", "\r\n");
+  // no idea why, skulpt is converting my python '\u033' to '\u000033', so let's revert it
+  // (it's used in ANSI escape codes for writing in color in the terminal)
+  //text = text.replaceAll("\u000033", "\033");
+  term.write(text);
+  term.write("\r\n\x1b[1;0m>>> ");
 };
 
 // Terminal logic
@@ -29,7 +45,7 @@ let inputString = "";
 term.onData((e) => {
   switch (e) {
     case "\r": // Enter was pressed
-      term.write("\r\n");
+      print(e);
       if (resolveInput !== undefined) {
         // if python is waiting for input
         resolveInput(inputString);
@@ -57,19 +73,7 @@ term.onData((e) => {
   }
 });
 
-const print = (text) => {
-  // we need \r\n as, on xterm: \n just move the cursor down ; \r move it left
-  // we also don't care if we duplicate a \r
-  text = text.replaceAll("\r", "");
-  text = text.replaceAll("\n", "\r\n");
-  // no idea why, skulpt is converting my python '\u033' to '\u000033', so let's revert it
-  // (it's used in ANSI escape codes for writing in color in the terminal)
-  //text = text.replaceAll("\u000033", "\033");
-  term.write(text);
-};
-
 const XTerminal = ({ terminalRef }) => {
-  term.loadAddon(fitAddon);
   const { colorMode } = useColorMode();
   const output = useSelector((state) => state.code.output);
 
@@ -83,7 +87,7 @@ const XTerminal = ({ terminalRef }) => {
       terminalRef.current.removeChild(terminalRef.current.children[0]);
     term.open(terminalRef.current);
     fitAddon.fit();
-    print(output);
+    if (output !== "") print(output);
   });
 
   return <Box width="100%" height="100%" id="xterm" ref={terminalRef}></Box>;
