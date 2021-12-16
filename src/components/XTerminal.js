@@ -87,8 +87,11 @@ const XTerminal = ({ terminalRef }) => {
       terminalRef.current.removeChild(terminalRef.current.children[0]);
     term.open(terminalRef.current);
     fitAddon.fit();
-    if (output !== "") print(output);
   });
+
+  useEffect(() => {
+    if (output !== "") print(output);
+  }, [output]);
 
   return <Box width="100%" height="100%" id="xterm" ref={terminalRef}></Box>;
 };
