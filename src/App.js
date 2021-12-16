@@ -66,7 +66,7 @@ const App = () => {
     });
     myPromise.then(
       function (mod) {
-        dispatch(setOutput("\n\x1b[1;0m" + result));
+        if (result !== "") dispatch(setOutput("\n\x1b[1;0m" + result));
         console.log("success");
       },
       function (err) {
