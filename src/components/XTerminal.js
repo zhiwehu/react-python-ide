@@ -14,7 +14,7 @@ let resolveInput;
 export const termInput = (prompt) => {
   return new Promise((resolve) => {
     term.focus();
-    term.write(prompt + " ");
+    term.write("\x1b[1;0m" + prompt + " ");
     resolveInput = resolve;
   });
 };
@@ -83,9 +83,7 @@ const XTerminal = ({ terminalRef }) => {
       terminalRef.current.removeChild(terminalRef.current.children[0]);
     term.open(terminalRef.current);
     fitAddon.fit();
-    if (output !== "") {
-      print(output);
-    }
+    print(output);
   });
 
   return <Box width="100%" height="100%" id="xterm" ref={terminalRef}></Box>;
