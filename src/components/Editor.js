@@ -9,13 +9,14 @@ import "ace-builds/src-noconflict/theme-clouds_midnight";
 const Editor = ({ editorRef }) => {
   const currentFile = useSelector((state) => state.code.currentFile);
   const code = currentFile !== null ? currentFile.code : "";
+  const fontSize = useSelector((state) => state.settings.fontSize);
   const { colorMode } = useColorMode();
   return (
     <AceEditor
       ref={editorRef}
       defaultValue={code}
       value={code}
-      fontSize={16}
+      fontSize={fontSize}
       width="100%"
       height="100%"
       mode="python"

@@ -7,17 +7,15 @@ import IDEBox from "../components/IDEBox";
 import {
   toggleConsoleSize,
   toggleShowHideConsole,
-} from "../reducers/IDEWindowSizeSlice";
+} from "../reducers/IDESettingsSlice";
 import { setOutput } from "../reducers/pythonFileListSlice";
 
 const Console = ({ terminalRef }) => {
-  const codeFullSize = useSelector((state) => state.windowSize.codeFullSize);
-  const canvasFullSize = useSelector(
-    (state) => state.windowSize.canvasFullSize
-  );
-  const show = useSelector((state) => state.windowSize.consoleShow);
+  const codeFullSize = useSelector((state) => state.settings.codeFullSize);
+  const canvasFullSize = useSelector((state) => state.settings.canvasFullSize);
+  const show = useSelector((state) => state.settings.consoleShow);
   const consoleFullSize = useSelector(
-    (state) => state.windowSize.consoleFullSize
+    (state) => state.settings.consoleFullSize
   );
 
   const clear = () => {

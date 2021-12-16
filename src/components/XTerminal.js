@@ -8,7 +8,6 @@ import "xterm/css/xterm.css";
 
 const term = new Terminal();
 const fitAddon = new FitAddon();
-term.loadAddon(fitAddon);
 term.write(">>> ");
 
 let resolveInput;
@@ -74,6 +73,7 @@ term.onData((e) => {
 });
 
 const XTerminal = ({ terminalRef }) => {
+  term.loadAddon(fitAddon);
   const { colorMode } = useColorMode();
   const output = useSelector((state) => state.code.output);
 

@@ -4,16 +4,15 @@ import { BsCode } from "react-icons/bs";
 
 import Editor from "../components/Editor";
 import IDEBox from "../components/IDEBox";
-import { toggleCodeSize } from "../reducers/IDEWindowSizeSlice";
+import { toggleCodeSize, setFontSize } from "../reducers/IDESettingsSlice";
 
 const CodeArea = ({ editorRef }) => {
-  const codeFullSize = useSelector((state) => state.windowSize.codeFullSize);
-  const canvasFullSize = useSelector(
-    (state) => state.windowSize.canvasFullSize
-  );
+  const codeFullSize = useSelector((state) => state.settings.codeFullSize);
+  const canvasFullSize = useSelector((state) => state.settings.canvasFullSize);
   const consoleFullSize = useSelector(
-    (state) => state.windowSize.consoleFullSize
+    (state) => state.settings.consoleFullSize
   );
+
   const dispatch = useDispatch();
 
   let codeDisplay = "flex";
@@ -37,6 +36,7 @@ const CodeArea = ({ editorRef }) => {
         toggleFullSize={() => dispatch(toggleCodeSize())}
         fullSize={codeFullSize}
         titleIcon={BsCode}
+        setFZ={(fz) => dispatch(setFontSize(fz))}
       >
         <Editor editorRef={editorRef} />
       </IDEBox>

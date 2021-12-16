@@ -6,17 +6,15 @@ import IDEBox from "../components/IDEBox";
 import {
   toggleCanvasSize,
   toggleShowHideCanvas,
-} from "../reducers/IDEWindowSizeSlice";
+} from "../reducers/IDESettingsSlice";
 
 const Turtle = ({ turtleCanvas }) => {
-  const codeFullSize = useSelector((state) => state.windowSize.codeFullSize);
-  const canvasFullSize = useSelector(
-    (state) => state.windowSize.canvasFullSize
-  );
+  const codeFullSize = useSelector((state) => state.settings.codeFullSize);
+  const canvasFullSize = useSelector((state) => state.settings.canvasFullSize);
   const consoleFullSize = useSelector(
-    (state) => state.windowSize.consoleFullSize
+    (state) => state.settings.consoleFullSize
   );
-  const show = useSelector((state) => state.windowSize.canvasShow);
+  const show = useSelector((state) => state.settings.canvasShow);
 
   const dispatch = useDispatch();
 

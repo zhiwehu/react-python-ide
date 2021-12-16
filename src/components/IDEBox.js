@@ -25,6 +25,7 @@ const IDEBox = ({
   editorRef = null,
   titleIcon,
   clearConsole = null,
+  setFZ = null,
 }) => {
   const { colorMode } = useColorMode();
   return (
@@ -51,6 +52,7 @@ const IDEBox = ({
                   let fz = parseInt(editorRef.current.editor.getFontSize());
                   fz += 1;
                   if (fz > 80) fz = 80;
+                  setFZ(fz);
                   editorRef.current.editor.setFontSize(fz);
                 }}
               />
@@ -62,6 +64,7 @@ const IDEBox = ({
                   let fz = parseInt(editorRef.current.editor.getFontSize());
                   fz -= 1;
                   if (fz < 12) fz = 12;
+                  setFZ(fz);
                   editorRef.current.editor.setFontSize(fz);
                 }}
               />

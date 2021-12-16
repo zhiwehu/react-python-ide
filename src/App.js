@@ -18,7 +18,7 @@ const App = () => {
   const editorRef = useRef(null);
   const turtleCanvas = useRef(null);
   const terminalRef = useRef(null);
-  const codeFullSize = useSelector((state) => state.windowSize.codeFullSize);
+  const codeFullSize = useSelector((state) => state.settings.codeFullSize);
 
   const dispatch = useDispatch();
 
