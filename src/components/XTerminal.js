@@ -7,7 +7,6 @@ import { Box, useColorMode } from "@chakra-ui/react";
 import "xterm/css/xterm.css";
 
 const term = new Terminal();
-const fitAddon = new FitAddon();
 term.write(">>> ");
 
 let resolveInput;
@@ -73,6 +72,7 @@ term.onData((e) => {
 });
 
 const XTerminal = ({ terminalRef }) => {
+  const fitAddon = new FitAddon();
   term.loadAddon(fitAddon);
   const { colorMode } = useColorMode();
   const output = useSelector((state) => state.code.output);
