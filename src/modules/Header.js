@@ -3,7 +3,9 @@ import {
   IconButton,
   Stack,
   Spacer,
+  Badge,
   useColorMode,
+  HStack,
 } from "@chakra-ui/react";
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import MenuButtons from "../components/MenuButtons";
@@ -26,20 +28,24 @@ const Header = ({ editorRef, handleRunCode }) => {
       </Flex>
       <MenuButtons editorRef={editorRef} handleRunCode={handleRunCode} />
       <Spacer />
-      <Flex
+      <HStack
         zIndex={100}
         px={4}
+        spacing={2}
         position={{ base: "absolute", lg: "relative" }}
         right={0}
         top={{ base: "-11px", lg: 0 }}
         align="center"
         justify="center"
       >
+        <Badge variant="subtle" colorScheme="green">
+          beta
+        </Badge>
         <IconButton
           onClick={toggleColorMode}
           icon={colorMode === "light" ? <SunIcon /> : <MoonIcon />}
         />
-      </Flex>
+      </HStack>
     </Stack>
   );
 };

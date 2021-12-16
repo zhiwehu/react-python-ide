@@ -61,7 +61,7 @@ const MenuButtons = ({ editorRef, handleRunCode }) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <HStack spacing={2}>
+    <HStack spacing={1}>
       <Tooltip label="My Python Files">
         <IconButton
           aria-label="My Python Files"
