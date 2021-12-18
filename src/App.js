@@ -4,11 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Box, Flex, Stack, VStack } from "@chakra-ui/react";
 
 import Header from "./modules/Header";
-import {
-  setCurrentFile,
-  getCurrentDateTime,
-  setOutput,
-} from "./reducers/pythonFileListSlice";
+import { setOutput } from "./reducers/pythonFileListSlice";
 import CodeArea from "./modules/CodeArea";
 import Turtle from "./modules/Turtle";
 import Console from "./modules/Console";
@@ -36,13 +32,7 @@ const App = () => {
     let result = "";
     dispatch(setOutput(result));
     let code = editorRef.current.editor.getValue();
-    dispatch(
-      setCurrentFile({
-        id: null,
-        code: code,
-        datetime: getCurrentDateTime(),
-      })
-    );
+
     //skulpt.pre = "output";
     skulpt.configure({
       inputfun: termInput,
