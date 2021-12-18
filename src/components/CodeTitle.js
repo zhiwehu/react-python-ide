@@ -21,7 +21,7 @@ const CodeTitle = () => {
       <Text
         display={editing ? "none" : "flex"}
         onClick={() => setEditing(true)}
-        style={{ width: "150px", maxWidth: "150px" }}
+        style={{ maxWidth: "150px" }}
         overflow="hidden"
       >
         {title}
