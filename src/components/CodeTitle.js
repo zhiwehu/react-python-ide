@@ -1,79 +1,61 @@
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Flex,
-  IconButton,
-  HStack,
-  Editable,
-  EditablePreview,
-  EditableInput,
-  useEditableControls,
-} from "@chakra-ui/react";
+import { Text, Input, IconButton, HStack } from "@chakra-ui/react";
 import { FaPen } from "react-icons/fa";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { setCurrentFile } from "../reducers/pythonFileListSlice";
+import { useState, useEffect } from "react";
 
-const EditableControls = () => {
-  const {
-    isEditing,
-    getSubmitButtonProps,
-    getCancelButtonProps,
-    getEditButtonProps,
-  } = useEditableControls();
-  if (isEditing) {
-    return (
-      <HStack align="center" pl={2} spacing={4}>
-        <IconButton
-          cursor="pointer"
-          icon={<CheckIcon />}
-          {...getSubmitButtonProps()}
-        />
-        <IconButton
-          cursor="pointer"
-          icon={<CloseIcon />}
-          {...getCancelButtonProps()}
-        />
-      </HStack>
-    );
-  } else {
-    return (
-      <Flex align="center" pl={2}>
+const CodeTitle = () => {
+  const dispatch = useDispatch();
+  const currentFile = useSelector((state) => state.code.currentFile);
+  const [editing, setEditing] = useState(false);
+  const [title, setTitle] = useState(
+    currentFile !== null ? currentFile.title : "unnamed"
+  );
+  useEffect(() => {
+    setTitle(currentFile !== null ? currentFile.title : "unnamed");
+  }, [currentFile]);
+
+  return (
+    <HStack spacing={2} align="center" justify="space-between">
+      <Text
+        display={editing ? "none" : "flex"}
+        onClick={() => setEditing(true)}
+      >
+        {title}
+      </Text>
+      <Input
+        display={editing ? "flex" : "none"}
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      {editing === true ? (
+        <>
+          <IconButton
+            cursor="pointer"
+            icon={<CheckIcon />}
+            onClick={() => {
+              dispatch(setCurrentFile({ ...currentFile, title: title }));
+              setEditing(false);
+            }}
+          />
+          <IconButton
+            cursor="pointer"
+            icon={<CloseIcon />}
+            onClick={() => {
+              setTitle(currentFile !== null ? currentFile.title : "unnamed");
+              setEditing(false);
+            }}
+          />
+        </>
+      ) : (
         <IconButton
           cursor="pointer"
           icon={<FaPen />}
-          {...getEditButtonProps()}
+          onClick={() => setEditing(true)}
         />
-      </Flex>
-    );
-  }
-};
-
-const CodeTitle = ({ editorRef }) => {
-  const dispatch = useDispatch();
-  const currentFile = useSelector((state) => state.code.currentFile);
-  const title = currentFile !== null ? currentFile.title : "unnamed";
-  const onSubmit = (newValue) => {
-    dispatch(
-      setCurrentFile({
-        ...currentFile,
-        title: newValue,
-        code: editorRef.current.editor.getValue(),
-      })
-    );
-  };
-  return (
-    <Flex justify="space-between">
-      <Editable defaultValue={title} display="flex" onSubmit={onSubmit}>
-        <EditablePreview
-          alignItems="center"
-          overflow="hidden"
-          display="flex"
-          flexWrap="nowrap"
-          maxW="150px"
-        />
-        <EditableInput maxW="150px" />
-        <EditableControls />
-      </Editable>
-    </Flex>
+      )}
+    </HStack>
   );
 };
 

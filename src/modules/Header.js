@@ -24,7 +24,7 @@ const Header = ({ editorRef, handleRunCode }) => {
     >
       <Flex>
         <PythonIcon width={50} height={50} style={{ paddingRight: "10px" }} />
-        <CodeTitle editorRef={editorRef} />
+        <CodeTitle />
       </Flex>
       <MenuButtons editorRef={editorRef} handleRunCode={handleRunCode} />
       <Spacer />
