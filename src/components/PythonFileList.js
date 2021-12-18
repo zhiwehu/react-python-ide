@@ -58,6 +58,7 @@ const PythonFileList = ({ onClose, isOpen }) => {
       data = files.filter((file) => {
         return file.title.toLowerCase().indexOf(search.toLowerCase()) >= 0;
       });
+      setPage(1);
       setTotalPage(Math.ceil(data.length / ITEM_PER_PAGE));
     } else {
       data = files;
