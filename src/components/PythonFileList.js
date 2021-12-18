@@ -82,7 +82,7 @@ const PythonFileList = ({ onClose, isOpen }) => {
                 pointerEvents="none"
                 children={<SearchIcon />}
               />
-              <Input onChange={onChange} />
+              <Input onChange={onChange} value={search} />
             </InputGroup>
           </Box>
           <SimpleGrid column={1} spacing={4}>
