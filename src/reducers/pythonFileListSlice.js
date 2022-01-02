@@ -19,7 +19,7 @@ speed(0)
 up()
 title = "你已经过了{}天，还剩下{}天。".format(used.days, left.days)
 goto(0, 200)
-write(title, align="center", font=("Kai", 20, "bold"))
+write(title, align="center", font=("Kai", 16, "bold"))
 goto(0, 180)
 
 r = 5
